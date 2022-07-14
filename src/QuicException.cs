@@ -13,6 +13,9 @@ namespace Dummy.Quic
         /// <summary>
         /// Initializes a new instance of the <see cref='QuicException'/> class.
         /// </summary>
+        /// <param name="error">The error associated with the exception.</param>
+        /// <param name="applicationErrorCode">The application protocol error code associated with the error.</param>
+        /// <param name="message">The message for the exception.</param>
         public QuicException(QuicError error, long? applicationErrorCode, string message)
             : base(message)
         {
