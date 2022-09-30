@@ -72,5 +72,10 @@ namespace Dummy.Quic
         /// The operation has been aborted.
         /// </summary>
         OperationAborted,
+
+        /// <summary>
+        /// Another QUIC listener is already listening on one of the requested application protocols on the same port.
+        /// </summary>
+        AlpnInUse,
     }
 }
