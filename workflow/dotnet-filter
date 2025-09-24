@@ -1,0 +1,13 @@
+:[
+    src=:/src/libraries/System.Net.Quic/src:[
+        Resources=:/Resources,
+        :/System/Net/Quic:[
+            ::Internal/,
+            ::QuicException.cs,
+            ::QuicError.cs,
+            ::QuicConnectionOptions.cs
+            ::QuicDefaults.cs
+        ]
+    ]:replace("System\\.Net\\.Quic":"Dummy.Quic"),
+    Common=:/src/libraries/Common:exclude[::tests]
+]
