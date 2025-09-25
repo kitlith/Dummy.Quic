@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
+// using System.Runtime.InteropServices.Marshalling;
 using Microsoft.Quic;
 using static Microsoft.Quic.MsQuic;
 using System.Net;
@@ -172,7 +172,7 @@ internal sealed unsafe partial class MsQuicApi
                 }
                 return;
             }
-            string? gitHash = Utf8StringMarshaller.ConvertToManaged(libGitHash);
+            string? gitHash = Marshal.PtrToStringUTF8((IntPtr)libGitHash);
 
             MsQuicLibraryVersion = $"{Interop.Libraries.MsQuic} {Version} ({gitHash})";
 
