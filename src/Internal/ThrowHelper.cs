@@ -17,12 +17,12 @@ internal static class ThrowHelper
 {
     internal static QuicException GetConnectionAbortedException(long errorCode)
     {
-        return new QuicException(QuicError.ConnectionAborted, errorCode, SR.Format(SR.net_quic_connectionaborted, errorCode));
+        return new QuicException(QuicError.ConnectionAborted, errorCode, string.Format(SR.net_quic_connectionaborted, errorCode));
     }
 
     internal static QuicException GetStreamAbortedException(long errorCode)
     {
-        return new QuicException(QuicError.StreamAborted, errorCode, SR.Format(SR.net_quic_streamaborted, errorCode));
+        return new QuicException(QuicError.StreamAborted, errorCode, string.Format(SR.net_quic_streamaborted, errorCode));
     }
 
     internal static QuicException GetOperationAbortedException(string? message = null)
@@ -93,14 +93,14 @@ internal static class ThrowHelper
                 status == QUIC_STATUS_CERT_UNTRUSTED_ROOT ||
                 status == QUIC_STATUS_CERT_NO_CERT)
             {
-                return new AuthenticationException(SR.Format(SR.net_quic_auth, GetErrorMessageForStatus(status, message)));
+                return new AuthenticationException(string.Format(SR.net_quic_auth, GetErrorMessageForStatus(status, message)));
             }
 
             //
             // Some TLS Alerts are mapped to dedicated QUIC_STATUS codes so we need to handle them individually.
             //
             if (status == QUIC_STATUS_ALPN_NEG_FAILURE) return new AuthenticationException(SR.net_quic_alpn_neg_error);
-            if (status == QUIC_STATUS_USER_CANCELED) return new AuthenticationException(SR.Format(SR.net_auth_tls_alert, TlsAlertMessage.UserCanceled));
+            if (status == QUIC_STATUS_USER_CANCELED) return new AuthenticationException(string.Format(SR.net_auth_tls_alert, TlsAlertMessage.UserCanceled));
 
             //
             // other TLS Alerts: MsQuic maps TLS alerts by offsetting them by a
@@ -120,13 +120,13 @@ internal static class ThrowHelper
             if ((uint)status >= (uint)QUIC_STATUS_CLOSE_NOTIFY && (uint)status < (uint)QUIC_STATUS_CLOSE_NOTIFY + 256)
             {
                 TlsAlertMessage alert = (TlsAlertMessage)(status - QUIC_STATUS_CLOSE_NOTIFY);
-                return new AuthenticationException(SR.Format(SR.net_auth_tls_alert, alert));
+                return new AuthenticationException(string.Format(SR.net_auth_tls_alert, alert));
             }
 
             //
             // for everything else, use general InternalError
             //
-            return new QuicException(QuicError.InternalError, null, SR.Format(SR.net_quic_internal_error, GetErrorMessageForStatus(status, message)));
+            return new QuicException(QuicError.InternalError, null, string.Format(SR.net_quic_internal_error, GetErrorMessageForStatus(status, message)));
         }
     }
 
@@ -196,7 +196,7 @@ internal static class ThrowHelper
     {
         if (value < 0 || value > max)
         {
-            throw new ArgumentOutOfRangeException(argumentName, value, SR.Format(SR.net_quic_in_range, propertyName, max));
+            throw new ArgumentOutOfRangeException(argumentName, value, string.Format(SR.net_quic_in_range, propertyName, max));
         }
     }
 
@@ -204,7 +204,7 @@ internal static class ThrowHelper
     {
         if (value < TimeSpan.Zero && value != Timeout.InfiniteTimeSpan)
         {
-            throw new ArgumentOutOfRangeException(argumentName, value, SR.Format(SR.net_quic_timeout_use_gt_zero, propertyName));
+            throw new ArgumentOutOfRangeException(argumentName, value, string.Format(SR.net_quic_timeout_use_gt_zero, propertyName));
         }
     }
 
@@ -212,7 +212,7 @@ internal static class ThrowHelper
     {
         if (value is null)
         {
-            throw new ArgumentNullException(argumentName, SR.Format(resourceName, propertyName));
+            throw new ArgumentNullException(argumentName, string.Format(resourceName, propertyName));
         }
     }
 }

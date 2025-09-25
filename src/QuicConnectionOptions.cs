@@ -45,7 +45,7 @@ public sealed class QuicReceiveWindowSizes
         {
             if (value <= 0 || ((value - 1) & value) != 0)
             {
-                throw new ArgumentOutOfRangeException(argumentName, value, SR.Format(SR.net_quic_power_of_2, $"{nameof(QuicConnectionOptions.InitialReceiveWindowSizes)}.{propertyName}"));
+                throw new ArgumentOutOfRangeException(argumentName, value, string.Format(SR.net_quic_power_of_2, $"{nameof(QuicConnectionOptions.InitialReceiveWindowSizes)}.{propertyName}"));
             }
         }
     }

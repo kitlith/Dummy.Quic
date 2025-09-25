@@ -116,7 +116,7 @@ internal static partial class MsQuicConfiguration
 
         if (certificate is null)
         {
-            throw new ArgumentException(SR.Format(SR.net_quic_not_null_ceritifcate, nameof(SslServerAuthenticationOptions.ServerCertificate), nameof(SslServerAuthenticationOptions.ServerCertificateContext), nameof(SslServerAuthenticationOptions.ServerCertificateSelectionCallback)), nameof(options));
+            throw new ArgumentException(string.Format(SR.net_quic_not_null_ceritifcate, nameof(SslServerAuthenticationOptions.ServerCertificate), nameof(SslServerAuthenticationOptions.ServerCertificateContext), nameof(SslServerAuthenticationOptions.ServerCertificateSelectionCallback)), nameof(options));
         }
 
         return Create(options, flags, certificate, intermediates, authenticationOptions.ApplicationProtocols, authenticationOptions.CipherSuitesPolicy, authenticationOptions.EncryptionPolicy);
@@ -127,13 +127,13 @@ internal static partial class MsQuicConfiguration
         // Validate options and SSL parameters.
         if (alpnProtocols is null || alpnProtocols.Count <= 0)
         {
-            throw new ArgumentException(SR.Format(SR.net_quic_not_null_not_empty_connection, nameof(SslApplicationProtocol)), nameof(options));
+            throw new ArgumentException(string.Format(SR.net_quic_not_null_not_empty_connection, nameof(SslApplicationProtocol)), nameof(options));
         }
 
 #pragma warning disable SYSLIB0040 // NoEncryption and AllowNoEncryption are obsolete
         if (encryptionPolicy == EncryptionPolicy.NoEncryption)
         {
-            throw new PlatformNotSupportedException(SR.Format(SR.net_quic_ssl_option, encryptionPolicy));
+            throw new PlatformNotSupportedException(string.Format(SR.net_quic_ssl_option, encryptionPolicy));
         }
 #pragma warning restore SYSLIB0040
 
