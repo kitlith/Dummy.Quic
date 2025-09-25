@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Net;
 using System.Net.Security;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -145,7 +146,7 @@ public abstract class QuicConnectionOptions
     /// The initial capacity is reported with the first invocation of the callback that might happen before the <see cref="QuicConnection"/> instance is handed out via either
     /// <see cref="QuicConnection.ConnectAsync(QuicClientConnectionOptions, CancellationToken)"/> or <see cref="QuicListener.AcceptConnectionAsync(CancellationToken)"/>.
     /// </summary>
-    public Action<QuicConnection, QuicStreamCapacityChangedArgs>? StreamCapacityCallback { get; set; }
+    //public Action<QuicConnection, QuicStreamCapacityChangedArgs>? StreamCapacityCallback { get; set; }
 
     /// <summary>
     /// Validates the options and potentially sets platform specific defaults.
