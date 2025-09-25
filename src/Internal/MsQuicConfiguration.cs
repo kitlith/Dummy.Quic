@@ -33,10 +33,10 @@ internal static partial class MsQuicConfiguration
         // Find the first certificate with private key, either from selection callback or from a provided collection.
         X509Certificate? certificate = null;
         ReadOnlyCollection<X509Certificate2>? intermediates = null;
-        if (authenticationOptions.ClientCertificateContext is not null)
+        if (false /*authenticationOptions.ClientCertificateContext is not null*/)
         {
-            certificate = authenticationOptions.ClientCertificateContext.TargetCertificate;
-            intermediates = authenticationOptions.ClientCertificateContext.IntermediateCertificates;
+            // certificate = authenticationOptions.ClientCertificateContext.TargetCertificate;
+            // intermediates = authenticationOptions.ClientCertificateContext.IntermediateCertificates;
         }
         else if (authenticationOptions.LocalCertificateSelectionCallback != null)
         {
@@ -104,11 +104,13 @@ internal static partial class MsQuicConfiguration
         {
             certificate = authenticationOptions.ServerCertificateSelectionCallback.Invoke(authenticationOptions, targetHost);
         }
+        #if NET8_0_OR_GREATER
         else if (authenticationOptions.ServerCertificateContext is not null)
         {
             certificate = authenticationOptions.ServerCertificateContext.TargetCertificate;
             intermediates = authenticationOptions.ServerCertificateContext.IntermediateCertificates;
         }
+        #endif
         else if (authenticationOptions.ServerCertificate is not null)
         {
             certificate = authenticationOptions.ServerCertificate;
@@ -210,7 +212,11 @@ internal static partial class MsQuicConfiguration
             // so we build the cert context to get on feature parity with SslStream. Note that this code
             // path runs after the MsQuicConfigurationCache check.
             SslStreamCertificateContext context = SslStreamCertificateContext.Create(cert, additionalCertificates: null, offline: true, trust: null);
+            #if NET8_0_OR_GREATER
             intermediates = context.IntermediateCertificates;
+            #else
+            // TODO: consider reflection
+            #endif
         }
 
         QUIC_HANDLE* handle;
