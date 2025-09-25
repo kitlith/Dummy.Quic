@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using Microsoft.Quic;
 using static Microsoft.Quic.MsQuic;
+using System.Net;
 
 #if TARGET_WINDOWS
 using Microsoft.Win32;

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Quic;
+using System.Net;
 
 namespace Dummy.Quic;
 

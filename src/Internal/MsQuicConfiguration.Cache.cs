@@ -11,6 +11,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using Microsoft.Quic;
+using System.Net;
 
 namespace Dummy.Quic;
 
