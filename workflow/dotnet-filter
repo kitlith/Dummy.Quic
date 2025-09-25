@@ -1,0 +1,38 @@
+:[
+    src=:/src/libraries/System.Net.Quic/src:[
+        Resources=:/Resources,
+        :/System/Net/Quic:[
+            ::Internal/,
+            ::QuicException.cs,
+            ::QuicError.cs,
+            ::QuicConnectionOptions.cs
+            ::QuicDefaults.cs
+        ]
+    ]:replace("System\\.Net\\.Quic":"Dummy.Quic"),
+    Common/src=:/src/libraries/Common/src:[
+        ::DisableRuntimeMarshalling.cs
+        ::System/AppContextSwitchHelper.cs
+        ::System/HexConverter.cs
+        System/Net=:/System/Net:[
+            ::SafeHandleCache.cs
+            ::ArrayBuffer.cs
+            ::MultiArrayBuffer.cs
+            ::Logging/NetEventSource.Common.cs
+            ::StreamBuffer.cs
+            ::IPAddressParserStatics.cs
+            ::Security/TlsAlertMessage.cs
+            ::Security/TargetHostNameHelper.cs
+            ::Security/SslKeyLogger.cs
+            ::IPv4AddressHelper.Common.cs
+            ::IPv6AddressHelper.Common.cs
+        ]
+
+        ::Interop/Windows/Interop.Libraries.cs
+
+        ::Interop/Linux/Interop.Libraries.cs
+
+        ::Interop/FreeBSD/Interop.Libraries.cs
+
+        ::Interop/OSX/Interop.Libraries.cs
+    ]
+]
