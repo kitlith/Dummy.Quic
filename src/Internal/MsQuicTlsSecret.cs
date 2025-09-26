@@ -4,6 +4,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Quic;
@@ -25,7 +26,8 @@ internal sealed class MsQuicTlsSecret : IDisposable
         QUIC_TLS_SECRETS* tlsSecrets = null;
         try
         {
-            tlsSecrets = (QUIC_TLS_SECRETS*)NativeMemory.AllocZeroed((nuint)sizeof(QUIC_TLS_SECRETS));
+            tlsSecrets = (QUIC_TLS_SECRETS*)Marshal.AllocHGlobal(sizeof(QUIC_TLS_SECRETS));
+            Unsafe.InitBlockUnaligned((void*)tlsSecrets, 0, (uint)sizeof(QUIC_TLS_SECRETS));
             MsQuicHelpers.SetMsQuicParameter(handle, QUIC_PARAM_CONN_TLS_SECRETS, (uint)sizeof(QUIC_TLS_SECRETS), (byte*)tlsSecrets);
             MsQuicTlsSecret instance = new MsQuicTlsSecret(tlsSecrets);
             handle.Disposable = instance;
@@ -39,7 +41,7 @@ internal sealed class MsQuicTlsSecret : IDisposable
             }
             if (tlsSecrets is not null)
             {
-                NativeMemory.Free(tlsSecrets);
+                Marshal.FreeHGlobal((IntPtr)tlsSecrets);
             }
             return null;
         }
@@ -132,7 +134,7 @@ internal sealed class MsQuicTlsSecret : IDisposable
 
             QUIC_TLS_SECRETS* tlsSecrets = _tlsSecrets;
             _tlsSecrets = null;
-            NativeMemory.Free(tlsSecrets);
+            Marshal.FreeHGlobal((IntPtr)tlsSecrets);
         }
     }
 }

@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Quic;
 
@@ -34,7 +35,7 @@ internal unsafe struct MsQuicBuffers : IDisposable
         QUIC_BUFFER* buffers = _buffers;
         _buffers = null;
         _count = 0;
-        NativeMemory.Free(buffers);
+        Marshal.FreeHGlobal((IntPtr)buffers);
     }
 
     private void Reserve(int count)
@@ -42,7 +43,10 @@ internal unsafe struct MsQuicBuffers : IDisposable
         if (count > _count)
         {
             FreeNativeMemory();
-            _buffers = (QUIC_BUFFER*)NativeMemory.AllocZeroed((nuint)count, (nuint)sizeof(QUIC_BUFFER));
+            QUIC_BUFFER* buffers = (QUIC_BUFFER*)Marshal.AllocHGlobal(count * sizeof(QUIC_BUFFER));
+            Unsafe.InitBlockUnaligned((void*)buffers, 0, (uint)count * (uint)sizeof(QUIC_BUFFER));
+            //_buffers = (QUIC_BUFFER*)NativeMemory.AllocZeroed((nuint)count, (nuint)sizeof(QUIC_BUFFER));
+            _buffers = buffers;
             _count = count;
         }
     }
@@ -53,7 +57,7 @@ internal unsafe struct MsQuicBuffers : IDisposable
         Debug.Assert(_buffers[index].Buffer is null);
         Debug.Assert(_buffers[index].Length == 0);
 
-        _buffers[index].Buffer = (byte*)NativeMemory.Alloc((nuint)buffer.Length, (nuint)sizeof(byte));
+        _buffers[index].Buffer = (byte*)Marshal.AllocHGlobal(buffer.Length * sizeof(byte));
         _buffers[index].Length = (uint)buffer.Length;
         buffer.Span.CopyTo(_buffers[index].Span);
     }
@@ -99,7 +103,7 @@ internal unsafe struct MsQuicBuffers : IDisposable
             byte* buffer = _buffers[i].Buffer;
             _buffers[i].Buffer = null;
             _buffers[i].Length = 0;
-            NativeMemory.Free(buffer);
+            Marshal.FreeHGlobal((IntPtr)buffer);
         }
     }
 

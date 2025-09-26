@@ -21,7 +21,7 @@ namespace System.Net
     [StructLayout(LayoutKind.Auto)]
     internal struct ArrayBuffer : IDisposable
     {
-#if NET
+#if NET && NET6_0_OR_GREATER
         private static int ArrayMaxLength => Array.MaxLength;
 #else
         private const int ArrayMaxLength = 0X7FFFFFC7;

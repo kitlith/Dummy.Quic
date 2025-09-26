@@ -102,13 +102,24 @@ internal static partial class MsQuicConfiguration
         {
             HashCode hash = default;
 
-            hash.AddBytes(CertificateThumbprints.Span);
+            //hash.AddBytes(CertificateThumbprints.Span);
+            // DUMMY_PERF: AddBytes was added in net6.0, and is much better performing than this.
+            // may need a slightly more performant polyfill.
+            foreach (byte b in CertificateThumbprints.Span)
+            {
+                hash.Add(b);
+            }
             hash.Add(Flags);
             hash.Add(Settings);
 
             foreach (var protocol in ApplicationProtocols)
             {
-                hash.AddBytes(protocol.Protocol.Span);
+                // hash.AddBytes(protocol.Protocol.Span);
+                // DUMMY_PERF: see above
+                foreach (byte b in protocol.Protocol.Span)
+                {
+                    hash.Add(b);
+                }
             }
 
             hash.Add(AllowedCipherSuites);
