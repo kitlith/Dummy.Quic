@@ -64,11 +64,11 @@ internal sealed class ValueTaskSource : IValueTaskSource
                 // Register cancellation if the token can be cancelled and the task is not completed yet.
                 if (cancellationToken.CanBeCanceled)
                 {
-                    _cancellationRegistration = cancellationToken.UnsafeRegister(static (obj, cancellationToken) =>
+                    _cancellationRegistration = cancellationToken.UnsafeRegister(static (obj) =>
                     {
-                        ValueTaskSource thisRef = (ValueTaskSource)obj!;
+                        (ValueTaskSource thisRef, CancellationToken cancellationToken) = ((ValueTaskSource, CancellationToken))obj!;
                         thisRef.TrySetException(new OperationCanceledException(cancellationToken));
-                    }, this);
+                    }, (this, cancellationToken)); // DUMMY_PERF: extra allocation?
                 }
             }
 

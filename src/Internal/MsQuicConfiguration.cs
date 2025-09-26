@@ -211,7 +211,7 @@ internal static partial class MsQuicConfiguration
             // MsQuic will not lookup intermediates in local CA store if not explicitly provided,
             // so we build the cert context to get on feature parity with SslStream. Note that this code
             // path runs after the MsQuicConfigurationCache check.
-            SslStreamCertificateContext context = SslStreamCertificateContext.Create(cert, additionalCertificates: null, offline: true, trust: null);
+            SslStreamCertificateContext context = SslStreamCertificateContext.Create(cert, additionalCertificates: null, offline: true);
             #if NET8_0_OR_GREATER
             intermediates = context.IntermediateCertificates;
             #else

@@ -77,15 +77,15 @@ internal sealed class ResettableValueTaskSource : IValueTaskSource
                 // Register cancellation if the token can be cancelled and the task is not completed yet.
                 if (cancellationToken.CanBeCanceled)
                 {
-                    _cancellationRegistration = cancellationToken.UnsafeRegister(static (obj, cancellationToken) =>
+                    _cancellationRegistration = cancellationToken.UnsafeRegister(static (obj) =>
                     {
-                        (ResettableValueTaskSource thisRef, object? target) = ((ResettableValueTaskSource, object?))obj!;
+                        (ResettableValueTaskSource thisRef, CancellationToken cancellationToken, object? target) = ((ResettableValueTaskSource, CancellationToken, object?))obj!;
                         lock (thisRef)
                         {
                             thisRef._cancelledToken = cancellationToken;
                         }
                         thisRef._cancellationAction?.Invoke(target);
-                    }, (this, keepAlive));
+                    }, (this, cancellationToken, keepAlive));
                 }
             }
 
