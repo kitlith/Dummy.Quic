@@ -13,21 +13,25 @@ maybe_create_remote() {
 
 }
 
-maybe_create_remote dotnet https://github.com/dotnet/runtime.git
-echo "-- Fetching upstream dotnet"
-jj git fetch --remote dotnet -b main
-echo "-- Updating dotnet subset"
-josh-filter --file workflow/dotnet-filter not-a-filter --update refs/heads/dotnet-subset-tmp refs/remotes/dotnet/main
-jj bookmark move dotnet-subset --to dotnet-subset-tmp --allow-backwards
-jj bookmark delete dotnet-subset-tmp
+filter_remote() {
+	remote_name="$1"
+	remote_branch="$2"
+	filter_file="$3"
+	shift 2
+	echo "-- Fetching upstream $remote_name"
+	jj git fetch --remote "$remote_name" -b "$remote_branch"
+	echo "-- Updating $remote_name subset"
+	josh-filter --update refs/heads/${remote_name}-subset-tmp dummy-not-filter --file "$filter_file" refs/remotes/${remote_name}/${remote_branch}
+	# ran into issues when I tried to update the branch directly, though I need to re-check
+	# it might've been my editor trying to do things at the same time.
+	jj bookmark move --allow-backwards ${remote_name}-subset --to ${remote_name}-subset-tmp
+	jj bookmark delete ${remote_name}-subset-tmp
+}
 
+maybe_create_remote dotnet https://github.com/dotnet/runtime.git
+filter_remote dotnet main workflow/dotnet-filter
 maybe_create_remote msquic https://github.com/microsoft/msquic.git
-echo "-- Fetching upstream msquic"
-jj git fetch --remote msquic -b main
-echo "-- Updating msquic interop bindings"
-josh-filter ':[src/Interop=:/src/cs/lib]' --update refs/heads/msquic-subset-tmp refs/remotes/msquic/main
-jj bookmark move msquic-subset --to msquic-subset-tmp --allow-backwards
-jj bookmark delete msquic-subset-tmp
+filter_remote msquic main workflow/msquic-filter
 
 echo "-- Rebasing onto updated upstreams"
 jj rebase -s merge -d workflow -d dotnet-subset -d msquic-subset
