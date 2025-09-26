@@ -9,5 +9,83 @@
             ::QuicDefaults.cs
         ]
     ]:replace("System\\.Net\\.Quic":"Dummy.Quic"),
-    Common=:/src/libraries/Common:exclude[::tests]
+    Common/src=:/src/libraries/Common/src:[
+        ::DisableRuntimeMarshalling.cs
+        ::System/AppContextSwitchHelper.cs
+        ::System/HexConverter.cs
+        System/Net=:/System/Net:[
+            ::SafeHandleCache.cs
+            ::ArrayBuffer.cs
+            ::MultiArrayBuffer.cs
+            ::Logging/NetEventSource.Common.cs
+            ::StreamBuffer.cs
+            ::IPAddressParserStatics.cs
+            ::IPEndPointExtensions.cs
+            ::Security/TlsAlertMessage.cs
+            ::Security/TargetHostNameHelper.cs
+            ::Security/SslKeyLogger.cs
+            ::IPv4AddressHelper.Common.cs
+            ::IPv6AddressHelper.Common.cs
+        ]
+
+        ::Interop/Windows/Interop.Libraries.cs
+        Interop/Windows/Crypt32=:/Interop/Windows/Crypt32:[
+            ::Interop.CERT_CONTEXT.cs
+            ::Interop.CERT_INFO.cs
+            ::Interop.CERT_PUBLIC_KEY_INFO.cs
+            ::Interop.CRYPT_ALGORITHM_IDENTIFIER.cs
+            ::Interop.CRYPT_BIT_BLOB.cs
+            ::Interop.DATA_BLOB.cs
+            ::Interop.certificates.cs
+            ::Interop.certificates_types.cs
+            ::Interop.CertEnumCertificatesInStore.cs
+            ::Interop.MsgEncodingType.cs
+            ::Interop.CertCotextPropId.cs
+            ::Interop.CertDuplicateCertificateContext.cs
+            ::Interop.CertGetCertificateContextProperty_NO_NULLABLE.cs
+        ]
+        Microsoft/Win32/SafeHandles=:/Microsoft/Win32/SafeHandles:[
+            ::SafeCrypt32Handle.cs
+            ::SafeHandleCache.cs
+            ::SafeCertContextHandle.cs
+        ]
+        ::Interop/Windows/SChannel/Interop.SECURITY_STATUS.cs
+        ::System/Net/Security/CertificateValidation.Windows.cs
+        ::System/Net/SocketAddressPal.Windows.cs
+
+        Interop/Unix/System.Security.Cryptography.Native=:/Interop/Unix/System.Security.Cryptography.Native:[
+            ::Interop.ASN1.cs
+            ::Interop.BIO.cs
+            ::Interop.ERR.cs
+            ::Interop.Initialization.cs
+            ::Interop.Crypto.cs
+            ::Interop.X509.cs
+            ::Interop.X509Name.cs
+            ::Interop.X509Ext.cs
+            ::Interop.X509Stack.cs
+            ::Interop.X509StoreCtx.cs
+        ]
+        ::Interop/Unix/System.Net.Security.Native/Interop.Initialization.cs
+        Microsoft/Win32/SafeHandles=:/Microsoft/Win32/SafeHandles:[
+            ::SafeX509Handles.Unix.cs
+            ::X509ExtensionSafeHandles.Unix.cs
+            ::SafeInteriorHandle.cs
+            ::SafeBioHandle.Unix.cs
+            ::Asn1SafeHandles.Unix.cs
+            ::SafeHandleCache.cs
+        ]
+
+        ::Interop/Unix/Interop.Libraries.cs
+        ::Interop/Unix/Interop.Errors.cs
+        ::Interop/Unix/System.Native/Interop.SocketAddress.cs
+        ::System/Net/SocketAddressPal.Unix.cs
+
+        ::System/Net/Security/CertificateValidation.Unix.cs
+        ::Interop/Linux/Interop.Libraries.cs
+
+        ::Interop/FreeBSD/Interop.Libraries.cs
+
+        ::System/Net/Security/CertificateValidation.OSX.cs
+        ::Interop/OSX/Interop.Libraries.cs
+    ]
 ]
