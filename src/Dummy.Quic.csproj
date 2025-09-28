@@ -64,7 +64,7 @@
 
     <!-- Unix (Linux) specific files -->
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('freebsd'))">
-        <Compile Include="$(CommonPath)Interop\Unix\System.Security.Cryptography.Native\Interop.ASN1.cs" Link="Common\Interop\Unix\System.Security.Cryptography.Native\Interop.ASN1.cs" />
+        <!-- <Compile Include="$(CommonPath)Interop\Unix\System.Security.Cryptography.Native\Interop.ASN1.cs" Link="Common\Interop\Unix\System.Security.Cryptography.Native\Interop.ASN1.cs" />
         <Compile Include="$(CommonPath)Interop\Unix\System.Security.Cryptography.Native\Interop.BIO.cs" Link="Common\Interop\Unix\System.Security.Cryptography.Native\Interop.BIO.cs" />
         <Compile Include="$(CommonPath)Interop\Unix\System.Security.Cryptography.Native\Interop.ERR.cs" Link="Common\Interop\Unix\System.Security.Cryptography.Native\Interop.ERR.cs" />
         <Compile Include="$(CommonPath)Interop\Unix\System.Security.Cryptography.Native\Interop.Initialization.cs" Link="Common\Interop\Unix\System.Security.Cryptography.Native\Interop.Initialization.cs" />
@@ -80,7 +80,7 @@
         <Compile Include="$(CommonPath)Microsoft\Win32\SafeHandles\SafeInteriorHandle.cs" Link="Common\Microsoft\Win32\SafeHandles\SafeInteriorHandle.cs" />
         <Compile Include="$(CommonPath)Microsoft\Win32\SafeHandles\SafeBioHandle.Unix.cs" Link="Common\Microsoft\Win32\SafeHandles\SafeBioHandle.Unix.cs" />
         <Compile Include="$(CommonPath)Microsoft\Win32\SafeHandles\Asn1SafeHandles.Unix.cs" Link="Common\Microsoft\Win32\SafeHandles\Asn1SafeHandles.Unix.cs" />
-        <Compile Include="$(CommonPath)Microsoft\Win32\SafeHandles\SafeHandleCache.cs" Link="Common\Microsoft\Win32\SafeHandles\SafeHandleCache.cs" />
+        <Compile Include="$(CommonPath)Microsoft\Win32\SafeHandles\SafeHandleCache.cs" Link="Common\Microsoft\Win32\SafeHandles\SafeHandleCache.cs" /> -->
     </ItemGroup>
 
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('osx')) or $(RuntimeIdentifier.StartsWith('freebsd'))">
@@ -90,13 +90,13 @@
 
     <!-- Linux specific files -->
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('linux'))">
-        <Compile Include="$(CommonPath)System\Net\Security\CertificateValidation.Unix.cs" Link="Common\System\Net\Security\CertificateValidation.Unix.cs" />
+        <!-- <Compile Include="$(CommonPath)System\Net\Security\CertificateValidation.Unix.cs" Link="Common\System\Net\Security\CertificateValidation.Unix.cs" /> -->
         <Compile Include="$(CommonPath)Interop\Linux\Interop.Libraries.cs" Link="Common\Interop\Linux\Interop.Libraries.cs" />
     </ItemGroup>
 
     <!-- FreeBSD specific files -->
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('freebsd'))">
-        <Compile Include="$(CommonPath)System\Net\Security\CertificateValidation.Unix.cs" Link="Common\System\Net\Security\CertificateValidation.Unix.cs" />
+        <!-- <Compile Include="$(CommonPath)System\Net\Security\CertificateValidation.Unix.cs" Link="Common\System\Net\Security\CertificateValidation.Unix.cs" /> -->
         <Compile Include="$(CommonPath)Interop\FreeBSD\Interop.Libraries.cs" Link="Common\Interop\FreeBSD\Interop.Libraries.cs" />
     </ItemGroup>
 
