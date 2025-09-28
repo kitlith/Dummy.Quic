@@ -23,14 +23,13 @@
         <Compile Include="$(CommonPath)System\Net\Logging\NetEventSource.Common.cs" Link="Common\System\Net\Logging\NetEventSource.Common.cs" />
         <Compile Include="$(CommonPath)System\Net\StreamBuffer.cs" Link="Common\System\Net\StreamBuffer.cs" />
         <Compile Include="$(CommonPath)System\Net\IPAddressParserStatics.cs" Link="Common\System\Net\IPAddressParserStatics.cs" />
-        <Compile Include="$(CommonPath)System\Net\IPEndPointExtensions.cs" Link="Common\System\Net\IPEndPointExtensions.cs" />
         <Compile Include="$(CommonPath)System\Net\Security\TlsAlertMessage.cs" Link="Common\System\Net\Security\TlsAlertMessage.cs" />
         <Compile Include="$(CommonPath)System\HexConverter.cs" Link="Common\System\HexConverter.cs" />
         <Compile Include="$(CommonPath)System\Net\Security\TargetHostNameHelper.cs" Link="Common\System\Net\Security\TargetHostNameHelper.cs" />
         <Compile Include="$(CommonPath)System\Net\Security\SslKeyLogger.cs" Link="Common\System\Net\Security\SslKeyLogger.cs" />
         <!-- IP parser -->
-        <Compile Include="$(CommonPath)System\Net\IPv4AddressHelper.Common.cs" Link="System\Net\IPv4AddressHelper.Common.cs" />
-        <Compile Include="$(CommonPath)System\Net\IPv6AddressHelper.Common.cs" Link="System\Net\IPv6AddressHelper.Common.cs" />
+        <!-- <Compile Include="$(CommonPath)System\Net\IPv4AddressHelper.Common.cs" Link="System\Net\IPv4AddressHelper.Common.cs" />
+        <Compile Include="$(CommonPath)System\Net\IPv6AddressHelper.Common.cs" Link="System\Net\IPv6AddressHelper.Common.cs" /> -->
     </ItemGroup>
 
     <!-- Windows specific files -->
@@ -60,7 +59,7 @@
         Link="Common\Microsoft\Win32\SafeHandles\SafeCertContextHandle.cs" />
         <Compile Include="$(CommonPath)Interop\Windows\SChannel\Interop.SECURITY_STATUS.cs" Link="Common\Interop\Windows\SChannel\Interop.SECURITY_STATUS.cs" />
         <Compile Include="$(CommonPath)System\Net\Security\CertificateValidation.Windows.cs" Link="Common\System\Net\Security\CertificateValidation.Windows.cs" />
-        <Compile Include="$(CommonPath)System\Net\SocketAddressPal.Windows.cs" Link="Common\System\Net\SocketAddressPal.Windows.cs" />
+        <!-- <Compile Include="$(CommonPath)System\Net\SocketAddressPal.Windows.cs" Link="Common\System\Net\SocketAddressPal.Windows.cs" /> -->
     </ItemGroup>
 
     <!-- Unix (Linux) specific files -->
@@ -87,8 +86,6 @@
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('osx')) or $(RuntimeIdentifier.StartsWith('freebsd'))">
         <Compile Include="$(CommonPath)Interop\Unix\Interop.Libraries.cs" Link="Common\Interop\Unix\Interop.Libraries.cs" />
         <Compile Include="$(CommonPath)Interop\Unix\Interop.Errors.cs" Link="Common\Interop\Unix\Interop.Errors.cs" />
-        <Compile Include="$(CommonPath)Interop\Unix\System.Native\Interop.SocketAddress.cs" Link="Common\Interop\Unix\System.Native\Interop.SocketAddress.cs" />
-        <Compile Include="$(CommonPath)System\Net\SocketAddressPal.Unix.cs" Link="Common\System\Net\SocketAddressPal.Unix.cs" />
     </ItemGroup>
 
     <!-- Linux specific files -->

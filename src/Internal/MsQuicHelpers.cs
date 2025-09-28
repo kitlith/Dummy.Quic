@@ -36,22 +36,65 @@ internal static class MsQuicHelpers
         return false;
     }
 
+    internal static AddressFamily QuicAddressFamilyToAddressFamily(int quicAddressFamily)
+    {
+        if (quicAddressFamily == QUIC_ADDRESS_FAMILY_UNSPEC)
+        {
+            return AddressFamily.Unspecified;
+        }
+        else if (quicAddressFamily == QUIC_ADDRESS_FAMILY_INET)
+        {
+            return AddressFamily.InterNetwork;
+        }
+        else if (quicAddressFamily == QUIC_ADDRESS_FAMILY_INET6)
+        {
+            return AddressFamily.InterNetworkV6;
+        }
+        else
+        {
+            throw new ArgumentException("Unexpected quic address family", "quicAddressFamily");
+        }
+    }
+
+    internal static int AddressFamilyToQuicAddressFamily(AddressFamily family) => family switch
+    {
+        AddressFamily.Unspecified => QUIC_ADDRESS_FAMILY_UNSPEC,
+        AddressFamily.InterNetwork => QUIC_ADDRESS_FAMILY_INET,
+        AddressFamily.InterNetworkV6 => QUIC_ADDRESS_FAMILY_INET6,
+        _ => throw new ArgumentException("Unexpected address family", "family"),
+    };
+
     internal static unsafe IPEndPoint QuicAddrToIPEndPoint(QuicAddr* quicAddress, AddressFamily? addressFamilyOverride = null)
     {
-        // MsQuic always uses storage size as if IPv6 was used
-        Span<byte> addressBytes = new Span<byte>(quicAddress, SocketAddressPal.IPv6AddressSize);
-        if (addressFamilyOverride != null)
+        // DUMMY_PERF: We have a SocketAddress at Home.
+        AddressFamily family = addressFamilyOverride ?? QuicAddressFamilyToAddressFamily(quicAddress->Family);
+
+        if (family == AddressFamily.InterNetwork)
         {
-            SocketAddressPal.SetAddressFamily(addressBytes, (AddressFamily)addressFamilyOverride!);
+            return new IPEndPoint(new IPAddress(new ReadOnlySpan<byte>(quicAddress->Ipv4.sin_addr, 4)), (ushort)IPAddress.NetworkToHostOrder((short)quicAddress->Ipv4.sin_port));
         }
-        return IPEndPointExtensions.CreateIPEndPoint(addressBytes);
+        else if (family == AddressFamily.InterNetworkV6)
+        {
+            return new IPEndPoint(new IPAddress(new ReadOnlySpan<byte>(quicAddress->Ipv6.sin6_addr, 16)), (ushort)IPAddress.NetworkToHostOrder((short)quicAddress->Ipv6.sin6_port));
+        } else
+        {
+            throw new ArgumentException("address family was neither ipv4 or ipv6!");
+        }
     }
 
     internal static QuicAddr ToQuicAddr(this IPEndPoint ipEndPoint)
     {
         QuicAddr result = default;
         Span<byte> rawAddress = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref result, 1));
-        ipEndPoint.Serialize(rawAddress);
+
+        var addr = ipEndPoint.Serialize();
+        
+        // DUMMY_PERF: extra copy that upstream doesn't need to do.
+        int count = addr.Size;
+        for (int iii = 0; iii < count; ++iii)
+        {
+            rawAddress[iii] = addr[iii];
+        }
         return result;
     }
 
