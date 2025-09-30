@@ -23,6 +23,8 @@ filter_remote() {
 	josh-filter --update refs/heads/${remote_name}-subset dummy-not-filter --file "$filter_file" refs/remotes/${remote_name}/${remote_branch}
 }
 
+echo "-- Current operation ID (if you need to revert): $(jj op log --no-graph -n 1 -T 'id.short()')"
+
 maybe_create_remote dotnet https://github.com/dotnet/runtime.git
 filter_remote dotnet main workflow/dotnet-filter
 maybe_create_remote msquic https://github.com/microsoft/msquic.git
