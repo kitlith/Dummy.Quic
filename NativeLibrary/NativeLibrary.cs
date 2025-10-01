@@ -1,10 +1,20 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#if NETCOREAPP3_0_OR_GREATER
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+[assembly: TypeForwardedTo(typeof(NativeLibrary))]
+[assembly: TypeForwardedTo(typeof(DllImportResolver))]
+#else
+
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
+
+using Dummy.Quic.Polyfill;
 
 namespace System.Runtime.InteropServices
 {
@@ -39,7 +49,7 @@ namespace System.Runtime.InteropServices
         /// <exception cref="BadImageFormatException">If the library is not valid.</exception>
         public static IntPtr Load(string libraryPath)
         {
-            ArgumentNullException.ThrowIfNull(libraryPath);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(libraryPath);
 
             return LoadFromPath(libraryPath, throwOnError: true);
         }
@@ -53,7 +63,7 @@ namespace System.Runtime.InteropServices
         /// <exception cref="ArgumentNullException">If libraryPath is null</exception>
         public static bool TryLoad(string libraryPath, out IntPtr handle)
         {
-            ArgumentNullException.ThrowIfNull(libraryPath);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(libraryPath);
 
             handle = LoadFromPath(libraryPath, throwOnError: false);
             return handle != IntPtr.Zero;
@@ -83,11 +93,8 @@ namespace System.Runtime.InteropServices
         /// <exception cref="BadImageFormatException">If the library is not valid.</exception>
         public static IntPtr Load(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
         {
-            ArgumentNullException.ThrowIfNull(libraryName);
-            ArgumentNullException.ThrowIfNull(assembly);
-
-            if (assembly is not RuntimeAssembly)
-                throw new ArgumentException(SR.Argument_MustBeRuntimeAssembly);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(libraryName);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(assembly);
 
             return LoadLibraryByName(libraryName,
                               assembly,
@@ -118,11 +125,8 @@ namespace System.Runtime.InteropServices
         /// <exception cref="ArgumentException">If assembly is not a RuntimeAssembly</exception>
         public static bool TryLoad(string libraryName, Assembly assembly, DllImportSearchPath? searchPath, out IntPtr handle)
         {
-            ArgumentNullException.ThrowIfNull(libraryName);
-            ArgumentNullException.ThrowIfNull(assembly);
-
-            if (assembly is not RuntimeAssembly)
-                throw new ArgumentException(SR.Argument_MustBeRuntimeAssembly);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(libraryName);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(assembly);
 
             handle = LoadLibraryByName(libraryName,
                                 assembly,
@@ -155,8 +159,8 @@ namespace System.Runtime.InteropServices
         /// <exception cref="EntryPointNotFoundException">If the symbol is not found</exception>
         public static IntPtr GetExport(IntPtr handle, string name)
         {
-            ArgumentNullException.ThrowIfNull(handle);
-            ArgumentNullException.ThrowIfNull(name);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(handle);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(name);
 
             return GetSymbol(handle, name, throwOnError: true);
         }
@@ -171,8 +175,8 @@ namespace System.Runtime.InteropServices
         /// <exception cref="ArgumentNullException">If handle or name is null</exception>
         public static bool TryGetExport(IntPtr handle, string name, out IntPtr address)
         {
-            ArgumentNullException.ThrowIfNull(handle);
-            ArgumentNullException.ThrowIfNull(name);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(handle);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(name);
 
             address = GetSymbol(handle, name, throwOnError: false);
             return address != IntPtr.Zero;
@@ -200,11 +204,8 @@ namespace System.Runtime.InteropServices
         /// <exception cref="ArgumentException">If a resolver is already set for this assembly</exception>
         public static void SetDllImportResolver(Assembly assembly, DllImportResolver resolver)
         {
-            ArgumentNullException.ThrowIfNull(assembly);
-            ArgumentNullException.ThrowIfNull(resolver);
-
-            if (assembly is not RuntimeAssembly)
-                throw new ArgumentException(SR.Argument_MustBeRuntimeAssembly);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(assembly);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(resolver);
 
             if (s_nativeDllResolveMap == null)
             {
@@ -214,7 +215,8 @@ namespace System.Runtime.InteropServices
 
             if (!s_nativeDllResolveMap.TryAdd(assembly, resolver))
             {
-                throw new InvalidOperationException(SR.InvalidOperation_CannotRegisterSecondResolver);
+                // DUMMY_TODO
+                throw new InvalidOperationException("SR.InvalidOperation_CannotRegisterSecondResolver");
             }
         }
 
@@ -248,22 +250,22 @@ namespace System.Runtime.InteropServices
         /// Get a handle that can be used with <see cref="GetExport" /> or <see cref="TryGetExport" /> to resolve exports from the entry point module.
         /// </summary>
         /// <returns> The handle that can be used to resolve exports from the entry point module.</returns>
-        public static IntPtr GetMainProgramHandle()
-        {
-            IntPtr result = IntPtr.Zero;
-#if TARGET_WINDOWS
-            result = Interop.Kernel32.GetModuleHandle(null);
-#else
-            result = Interop.Sys.GetDefaultSearchOrderPseudoHandle();
-#endif
-            // I don't know when a failure case can occur here, but checking for it and throwing an exception
-            // if we encounter it.
-            if (result == IntPtr.Zero)
-            {
-                throw new Win32Exception(Marshal.GetLastPInvokeError());
-            }
-            return result;
-        }
+//          public static IntPtr GetMainProgramHandle()
+//          {
+//              IntPtr result = IntPtr.Zero;
+//  #if TARGET_WINDOWS
+//              result = Interop.Kernel32.GetModuleHandle(null);
+//  #else
+//              result = Interop.Sys.GetDefaultSearchOrderPseudoHandle();
+//  #endif
+//              // I don't know when a failure case can occur here, but checking for it and throwing an exception
+//              // if we encounter it.
+//              if (result == IntPtr.Zero)
+//              {
+//                  throw new Win32Exception(Marshal.GetLastPInvokeError());
+//              }
+//              return result;
+//          }
 
 #if !MONO
         private static IntPtr LoadFromPath(string libraryName, bool throwOnError)
@@ -280,12 +282,15 @@ namespace System.Runtime.InteropServices
 
         private static unsafe IntPtr GetSymbol(IntPtr handle, string symbolName, bool throwOnError)
         {
+            // DUMMY_TODO: strings
             IntPtr ret = GetSymbolOrNull(handle, symbolName);
             if (throwOnError && ret == IntPtr.Zero)
-                throw new EntryPointNotFoundException(SR.Format(SR.Arg_EntryPointNotFoundExceptionParameterizedNoLibrary, symbolName));
+                throw new EntryPointNotFoundException(string.Format("SR.Arg_EntryPointNotFoundExceptionParameterizedNoLibrary, {}", symbolName));
 
             return ret;
         }
 #endif
     }
 }
+
+#endif

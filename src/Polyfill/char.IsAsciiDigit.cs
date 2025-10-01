@@ -1,5 +1,6 @@
 namespace Dummy.Quic.Polyfill;
 
+// DUMMY_TODO: revisit when c# 14 & wider extension support becomes available
 internal static class Char
 {
     public static bool IsBetween(char c, char minInclusive, char maxInclusive) =>

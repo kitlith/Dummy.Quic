@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Sources;
+using Dummy.Quic.Polyfill;
 
 namespace Dummy.Quic;
 
@@ -175,7 +176,10 @@ internal sealed class ResettableValueTaskSource : IValueTaskSource
                 {
                     Debug.Assert(final);
                     // Set up the exception stack trace for the caller.
+                    #if NET5_0_OR_GREATER
+                    // DUMMY_TODO
                     exception = exception.StackTrace is null ? ExceptionDispatchInfo.SetCurrentStackTrace(exception) : exception;
+                    #endif
                     if (state is State.None or State.Awaiting)
                     {
                         _valueTaskSource.SetException(exception);
@@ -293,7 +297,7 @@ internal sealed class ResettableValueTaskSource : IValueTaskSource
     /// </summary>
     private struct FinalTaskSource
     {
-        private TaskCompletionSource? _finalTaskSource;
+        private TaskCompletionSource<object?>? _finalTaskSource;
         private bool _isCompleted;
         private bool _isSignaled;
         private Exception? _exception;
@@ -318,7 +322,7 @@ internal sealed class ResettableValueTaskSource : IValueTaskSource
                     return _signaledTask;
                 }
 
-                _finalTaskSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+                _finalTaskSource = new TaskCompletionSource<object?>(TaskCreationOptions.RunContinuationsAsynchronously);
                 if (!_isCompleted)
                 {
                     GCHandle handle = GCHandle.Alloc(keepAlive);
@@ -360,7 +364,7 @@ internal sealed class ResettableValueTaskSource : IValueTaskSource
                 }
                 else
                 {
-                    _finalTaskSource.SetResult();
+                    _finalTaskSource.SetResult(null);
                 }
             }
 

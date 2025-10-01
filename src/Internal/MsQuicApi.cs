@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Quic;
 using static Microsoft.Quic.MsQuic;
 using System.Net;
+using Dummy.Quic.Polyfill;
 
 #if TARGET_WINDOWS
 using Microsoft.Win32;
@@ -92,7 +93,7 @@ internal sealed unsafe partial class MsQuicApi
             return;
         }
 
-        if (OperatingSystem.IsWindows())
+        if (Environment.OSVersion.Platform == PlatformID.Win32NT)
         {
             // Windows ships msquic in the assembly directory next to Dummy.Quic, so load that.
             // For single-file deployments, the assembly location is an empty string so we fall back
@@ -192,7 +193,7 @@ internal sealed unsafe partial class MsQuicApi
             }
 
             // Assume SChannel is being used on windows and query for the actual provider from the library if querying is supported
-            QUIC_TLS_PROVIDER provider = OperatingSystem.IsWindows() ? QUIC_TLS_PROVIDER.SCHANNEL : QUIC_TLS_PROVIDER.OPENSSL;
+            QUIC_TLS_PROVIDER provider = Environment.OSVersion.Platform == PlatformID.Win32NT ? QUIC_TLS_PROVIDER.SCHANNEL : QUIC_TLS_PROVIDER.OPENSSL;
             paramSize = sizeof(QUIC_TLS_PROVIDER);
             apiTable->GetParam(null, QUIC_PARAM_GLOBAL_TLS_PROVIDER, &paramSize, &provider);
             UsesSChannelBackend = provider == QUIC_TLS_PROVIDER.SCHANNEL;
@@ -252,8 +253,7 @@ internal sealed unsafe partial class MsQuicApi
         return true;
     }
 
-    private static bool IsWindowsVersionSupported() => OperatingSystem.IsWindowsVersionAtLeast(s_minWindowsVersion.Major,
-        s_minWindowsVersion.Minor, s_minWindowsVersion.Build, s_minWindowsVersion.Revision);
+    private static bool IsWindowsVersionSupported() => Environment.OSVersion.Version >= s_minWindowsVersion;
 
     private static bool IsTls13Disabled(bool isServer)
     {

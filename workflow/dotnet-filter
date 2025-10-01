@@ -27,7 +27,12 @@
             ::IPv6AddressHelper.Common.cs
         ]
 
-        ::Interop/Windows/Interop.Libraries.cs
+        Interop/Windows=:/Interop/Windows:[
+            ::Interop.Libraries.cs
+            ::Interop.Errors.cs
+            ::Kernel32/Interop.FormatMessage.cs
+        ]
+        ::Microsoft/Win32/SafeHandles/SafeLibraryHandle.cs
 
         ::Interop/Linux/Interop.Libraries.cs
 
@@ -35,4 +40,24 @@
 
         ::Interop/OSX/Interop.Libraries.cs
     ]
+
+    NativeLibrary=:[
+        :/src/coreclr/nativeaot/System.Private.CoreLib/src/System/Runtime/InteropServices:[
+            ::NativeLibrary.NativeAot.cs
+            ::NativeLibrary.NativeAot.Unix.cs
+            ::NativeLibrary.NativeAot.Windows.cs
+        ]
+        :/src/libraries/System.Private.CoreLib/src/System/Runtime/InteropServices:[
+            ::NativeLibrary.cs
+            ::NativeLibrary.Unix.cs
+            ::NativeLibrary.Windows.cs
+        ]
+        :/src/libraries/System.Private.CoreLib/src/System/Runtime/Loader:[
+            ::LibraryNameVariation.cs
+            ::LibraryNameVariation.Unix.cs
+            ::LibraryNameVariation.Windows.cs
+        ]
+    ]
+
+    src/Polyfill=:/src/libraries/System.Net.Security/src/System/Net/Security::TlsCipherSuite.cs
 ]

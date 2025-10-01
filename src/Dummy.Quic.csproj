@@ -1,12 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>12.0</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RuntimeIdentifiers>linux-x64;win-x64</RuntimeIdentifiers>
         <PublishSelfContained>false</PublishSelfContained>
+        <!-- TODO: replace DynamicDependency with Unity's Preserve/similar attributes -->
+        <PolySharpIncludeRuntimeSupportedAttributes>true</PolySharpIncludeRuntimeSupportedAttributes>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -33,26 +35,42 @@
         <!-- IP parser -->
         <!-- <Compile Include="$(CommonPath)System\Net\IPv4AddressHelper.Common.cs" Link="System\Net\IPv4AddressHelper.Common.cs" />
         <Compile Include="$(CommonPath)System\Net\IPv6AddressHelper.Common.cs" Link="System\Net\IPv6AddressHelper.Common.cs" /> -->
+
+        <Compile Include="../NativeLibrary/NativeLibrary.cs" />
+        <Compile Include="../NativeLibrary/NativeLibrary.NativeAot.cs" />
+        <Compile Include="../NativeLibrary/LibraryNameVariation.cs" />
     </ItemGroup>
 
     <!-- Windows specific files -->
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win'))">
         <Compile Include="$(CommonPath)Interop\Windows\Interop.Libraries.cs" Link="Common\Interop\Windows\Interop.Libraries.cs" />
+        <Compile Include="$(CommonPath)Interop\Windows\Interop.Errors.cs" Link="Common\Interop\Windows\Interop.Libraries.cs" />
+        <Compile Include="$(CommonPath)Interop\Windows\Kernel32\Interop.FormatMessage.cs" Link="Common\Interop\Windows\Kernel32\Interop.FormatMessage.cs" />
+        <Compile Include="$(CommonPath)\Microsoft\Win32\SafeHandles\SafeLibraryHandle.cs" Link="Common\Microsoft\Win32\SafeHandles\SafeLibraryHandle.cs" />
+        <Compile Include="../NativeLibrary/NativeLibrary.Windows.cs" />
+        <Compile Include="../NativeLibrary/LibraryNameVariation.Windows.cs" />
+        <Compile Include="../NativeLibrary/Interop/Kernel32.cs" />
     </ItemGroup>
 
     <!-- Linux specific files -->
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('linux'))">
         <Compile Include="$(CommonPath)Interop\Linux\Interop.Libraries.cs" Link="Common\Interop\Linux\Interop.Libraries.cs" />
+        <Compile Include="../NativeLibrary/NativeLibrary.Unix.cs" />
+        <Compile Include="../NativeLibrary/LibraryNameVariation.Unix.cs" />
     </ItemGroup>
 
     <!-- FreeBSD specific files -->
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('freebsd'))">
         <Compile Include="$(CommonPath)Interop\FreeBSD\Interop.Libraries.cs" Link="Common\Interop\FreeBSD\Interop.Libraries.cs" />
+        <Compile Include="../NativeLibrary/NativeLibrary.Unix.cs" />
+        <Compile Include="../NativeLibrary/LibraryNameVariation.Unix.cs" />
     </ItemGroup>
 
     <!-- OSX specific files -->
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('osx'))">
         <Compile Include="$(CommonPath)Interop\OSX\Interop.Libraries.cs" Link="Common\Interop\OSX\Interop.Libraries.cs" />
+        <Compile Include="../NativeLibrary/NativeLibrary.Unix.cs" />
+        <Compile Include="../NativeLibrary/LibraryNameVariation.Unix.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -70,6 +88,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.CodeAnalysis.ResxSourceGenerator" Version="5.0.0-1.25277.114" PrivateAssets="all"/>
+      <PackageReference Include="Microsoft.CodeAnalysis.ResxSourceGenerator" Version="5.0.0-1.25277.114" PrivateAssets="all" />
+      <PackageReference Include="PolySharp" Version="1.15.0">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+      </PackageReference>
+      <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
     </ItemGroup>
 </Project>

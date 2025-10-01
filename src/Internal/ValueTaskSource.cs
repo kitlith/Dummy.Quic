@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Sources;
+using Dummy.Quic.Polyfill;
 
 namespace Dummy.Quic;
 
@@ -116,7 +117,10 @@ internal sealed class ValueTaskSource : IValueTaskSource
                         if (exception is not null)
                         {
                             // Set up the exception stack trace for the caller.
+                            #if NET5_0_OR_GREATER
+                            // DUMMY_TODO
                             exception = exception.StackTrace is null ? ExceptionDispatchInfo.SetCurrentStackTrace(exception) : exception;
+                            #endif
                             _valueTaskSource.SetException(exception);
                         }
                         else
