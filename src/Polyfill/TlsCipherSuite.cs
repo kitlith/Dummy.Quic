@@ -11,6 +11,13 @@
 namespace System.Net.Security
 {
 #endif
+
+#if NETCOREAPP3_0_OR_GREATER
+    using System.Net.Security;
+    using System.Runtime.CompilerServices;
+
+    [assembly:TypeForwardedTo(typeof(TlsCipherSuite))]
+#else
     [CLSCompliant(false)]
     public enum TlsCipherSuite : ushort
     {
@@ -1362,8 +1369,11 @@ namespace System.Net.Security
         /// Represents the TLS_ECDHE_PSK_WITH_AES_128_CCM_SHA256 cipher suite.
         /// </summary>
         TLS_ECDHE_PSK_WITH_AES_128_CCM_SHA256 = 0xD005, // rfc8442
+#endif
 #if PRODUCT
     }
 #endif
+#if !NETCOREAPP3_0_OR_GREATER
 }
+#endif
 //#>

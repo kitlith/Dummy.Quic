@@ -57,11 +57,14 @@ internal static class ThrowHelper
     internal static Exception GetExceptionForMsQuicStatus(int status, long? errorCode = default, string? message = null)
     {
         Exception ex = GetExceptionInternal(status, errorCode, message);
+        // TODO: consider reflection?
+        #if NET5_0_OR_GREATER
         if (status != 0)
         {
             // Include the raw MsQuic status in the HResult property for better diagnostics
             ex.HResult = status;
         }
+        #endif
 
         return ex;
 

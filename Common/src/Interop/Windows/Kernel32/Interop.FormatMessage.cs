@@ -15,8 +15,8 @@ internal static partial class Interop
         private const int FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100;
         private const int ERROR_INSUFFICIENT_BUFFER = 0x7A;
 
-        [LibraryImport(Libraries.Kernel32, EntryPoint = "FormatMessageW", SetLastError = true)]
-        private static unsafe partial int FormatMessage(
+        [DllImport(Libraries.Kernel32, EntryPoint = "FormatMessageW", BestFitMapping = true, CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
+        private static unsafe extern int FormatMessage(
             int dwFlags,
             IntPtr lpSource,
             uint dwMessageId,

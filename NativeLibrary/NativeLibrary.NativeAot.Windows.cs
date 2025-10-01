@@ -1,6 +1,8 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#if !NETCOREAPP3_0_OR_GREATER
+
 using System.Diagnostics;
 
 namespace System.Runtime.InteropServices
@@ -24,7 +26,7 @@ namespace System.Runtime.InteropServices
                     goto exit;
                 }
 
-                int lastError = Marshal.GetLastPInvokeError();
+                int lastError = Marshal.GetLastWin32Error();
                 if (lastError != Interop.Errors.ERROR_INVALID_PARAMETER)
                 {
                     errorTracker.TrackErrorCode(lastError);
@@ -35,7 +37,7 @@ namespace System.Runtime.InteropServices
             hmod = Interop.Kernel32.LoadLibraryEx(libraryName, IntPtr.Zero, flags & 0xFF);
             if (hmod == IntPtr.Zero)
             {
-                errorTracker.TrackErrorCode(Marshal.GetLastPInvokeError());
+                errorTracker.TrackErrorCode(Marshal.GetLastWin32Error());
             }
 
         exit:
@@ -88,7 +90,8 @@ namespace System.Runtime.InteropServices
                 }
 
                 string message = Interop.Kernel32.GetMessage(_errorCode);
-                throw new DllNotFoundException(SR.Format(SR.DllNotFound_Windows, libraryName, message));
+                // DUMMY_TODO: messages
+                throw new DllNotFoundException(string.Format("SR.DllNotFound_Windows, {}, {}", libraryName, message));
             }
 
             public void TrackErrorCode(int errorCode)
@@ -118,3 +121,5 @@ namespace System.Runtime.InteropServices
         }
     }
 }
+
+#endif

@@ -81,7 +81,14 @@ internal static partial class MsQuicConfiguration
             }
         }
 
-        return Create(options, flags, certificate, intermediates, authenticationOptions.ApplicationProtocols, authenticationOptions.CipherSuitesPolicy, authenticationOptions.EncryptionPolicy);
+        IEnumerable<TlsCipherSuite>? cipherSuitesPolicy;
+        #if NET5_0_OR_GREATER
+        cipherSuitesPolicy = authenticationOptions.CipherSuitesPolicy.AllowedCipherSuites;
+        #else
+        cipherSuitesPolicy = null; // DUMMY_TODO: optional override?
+        #endif
+
+        return Create(options, flags, certificate, intermediates, authenticationOptions.ApplicationProtocols, cipherSuitesPolicy, authenticationOptions.EncryptionPolicy);
     }
 
     public static MsQuicConfigurationSafeHandle Create(QuicServerConnectionOptions options, string? targetHost)
@@ -118,13 +125,20 @@ internal static partial class MsQuicConfiguration
 
         if (certificate is null)
         {
-            throw new ArgumentException(string.Format(SR.net_quic_not_null_ceritifcate, nameof(SslServerAuthenticationOptions.ServerCertificate), nameof(SslServerAuthenticationOptions.ServerCertificateContext), nameof(SslServerAuthenticationOptions.ServerCertificateSelectionCallback)), nameof(options));
+            throw new ArgumentException(string.Format(SR.net_quic_not_null_ceritifcate, nameof(SslServerAuthenticationOptions.ServerCertificate), /*nameof(SslServerAuthenticationOptions.ServerCertificateContext)*/ "", nameof(SslServerAuthenticationOptions.ServerCertificateSelectionCallback)), nameof(options));
         }
 
-        return Create(options, flags, certificate, intermediates, authenticationOptions.ApplicationProtocols, authenticationOptions.CipherSuitesPolicy, authenticationOptions.EncryptionPolicy);
+        IEnumerable<TlsCipherSuite>? cipherSuitesPolicy;
+        #if NET5_0_OR_GREATER
+        cipherSuitesPolicy = authenticationOptions?.CipherSuitesPolicy.AllowedCipherSuites;
+        #else
+        cipherSuitesPolicy = null; // DUMMY_TODO: optional override?
+        #endif
+
+        return Create(options, flags, certificate, intermediates, authenticationOptions.ApplicationProtocols, cipherSuitesPolicy, authenticationOptions.EncryptionPolicy);
     }
 
-    private static MsQuicConfigurationSafeHandle Create(QuicConnectionOptions options, QUIC_CREDENTIAL_FLAGS flags, X509Certificate? certificate, ReadOnlyCollection<X509Certificate2>? intermediates, List<SslApplicationProtocol>? alpnProtocols, CipherSuitesPolicy? cipherSuitesPolicy, EncryptionPolicy encryptionPolicy)
+    private static MsQuicConfigurationSafeHandle Create(QuicConnectionOptions options, QUIC_CREDENTIAL_FLAGS flags, X509Certificate? certificate, ReadOnlyCollection<X509Certificate2>? intermediates, List<SslApplicationProtocol>? alpnProtocols, IEnumerable<TlsCipherSuite>? cipherSuitesPolicy, EncryptionPolicy encryptionPolicy)
     {
         // Validate options and SSL parameters.
         if (alpnProtocols is null || alpnProtocols.Count <= 0)
@@ -211,11 +225,13 @@ internal static partial class MsQuicConfiguration
             // MsQuic will not lookup intermediates in local CA store if not explicitly provided,
             // so we build the cert context to get on feature parity with SslStream. Note that this code
             // path runs after the MsQuicConfigurationCache check.
+            #if NET_5_0_OR_GREATER
             SslStreamCertificateContext context = SslStreamCertificateContext.Create(cert, additionalCertificates: null, offline: true);
             #if NET8_0_OR_GREATER
             intermediates = context.IntermediateCertificates;
             #else
             // TODO: consider reflection
+            #endif
             #endif
         }
 
@@ -316,11 +332,11 @@ internal static partial class MsQuicConfiguration
         return configurationHandle;
     }
 
-    private static QUIC_ALLOWED_CIPHER_SUITE_FLAGS CipherSuitePolicyToFlags(CipherSuitesPolicy cipherSuitesPolicy)
+    private static QUIC_ALLOWED_CIPHER_SUITE_FLAGS CipherSuitePolicyToFlags(IEnumerable<TlsCipherSuite> cipherSuitesPolicy)
     {
         QUIC_ALLOWED_CIPHER_SUITE_FLAGS flags = QUIC_ALLOWED_CIPHER_SUITE_FLAGS.NONE;
 #pragma warning disable CA1416  // not supported on all platforms
-        foreach (TlsCipherSuite cipher in cipherSuitesPolicy.AllowedCipherSuites)
+        foreach (TlsCipherSuite cipher in cipherSuitesPolicy)
         {
             switch (cipher)
             {
@@ -343,7 +359,7 @@ internal static partial class MsQuicConfiguration
 
         if (flags == QUIC_ALLOWED_CIPHER_SUITE_FLAGS.NONE)
         {
-            throw new ArgumentException(SR.net_quic_empty_cipher_suite, nameof(SslClientAuthenticationOptions.CipherSuitesPolicy));
+            throw new ArgumentException(SR.net_quic_empty_cipher_suite, "cipherSuitesPolicy");
         }
 
         return flags;
