@@ -35,5 +35,12 @@ abandon_parents=$(jj log --no-graph -T 'change_id ++ " | "' -r 'merge- ~ workflo
 workflow_parent=$(jj log --no-graph -T 'change_id ++ " | "' -r 'merge- & workflow::')
 jj rebase -s merge -d "$workflow_parent none()" -d dotnet-subset -d msquic-subset
 
+{
+	echo "Merge upstream msquic bindings & dotnet subset"
+	echo
+	echo -n "MsQuic-Commit: "; jj log --no-graph -T 'commit_id ++ "\n"' -r main@msquic --no-pager --color=never
+	echo -n "Dotnet-Commit: "; jj log --no-graph -T 'commit_id ++ "\n"' -r main@dotnet --no-pager --color=never
+} | jj desc -r merge --stdin
+
 echo "-- Abandoning old versions of upstreams"
 jj abandon -r "..($abandon_parents none()) ~ ..merge"
