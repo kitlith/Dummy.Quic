@@ -56,6 +56,7 @@ public abstract class QuicStream {
             {
                 NetEventSource.Error(null, $"Received event {streamEvent->Type} for [strm][{(nint)stream:X11}] while stream is already disposed");
             }
+            QuicLog.Error?.Invoke($"Received event {streamEvent->Type} for [strm][{(nint)stream:X11}] while stream is already disposed");
             return MsQuic.QUIC_STATUS_INVALID_STATE;
         }
 
@@ -66,6 +67,7 @@ public abstract class QuicStream {
             {
                 NetEventSource.Info(instance, $"{instance} Received event {streamEvent->Type} {streamEvent->ToString()}");
             }
+            QuicLog.Info?.Invoke($"{instance} Received event {streamEvent->Type} {streamEvent->ToString()}");
             return instance.HandleStreamEvent(ref *streamEvent);
         }
         catch (Exception ex)
@@ -74,6 +76,7 @@ public abstract class QuicStream {
             {
                 NetEventSource.Error(instance, $"{instance} Exception while processing event {streamEvent->Type}: {ex}");
             }
+            QuicLog.Error?.Invoke($"{instance} Exception while processing event {streamEvent->Type}: {ex}");
             return MsQuic.QUIC_STATUS_INTERNAL_ERROR;
         }
     }

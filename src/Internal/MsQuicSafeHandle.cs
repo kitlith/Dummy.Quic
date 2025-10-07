@@ -40,6 +40,7 @@ public unsafe class MsQuicSafeHandle : SafeHandle
         {
             NetEventSource.Info(this, $"{this} MsQuicSafeHandle created");
         }
+        QuicLog.Info?.Invoke($"{this} MsQuicSafeHandle created");
     }
 
     public MsQuicSafeHandle(QUIC_HANDLE* handle, SafeHandleType safeHandleType)
@@ -70,6 +71,7 @@ public unsafe class MsQuicSafeHandle : SafeHandle
         {
             NetEventSource.Info(this, $"{this} MsQuicSafeHandle released");
         }
+        QuicLog.Info?.Invoke($"{this} MsQuicSafeHandle released");
 
         return true;
     }
@@ -126,6 +128,7 @@ public sealed class MsQuicContextSafeHandle : MsQuicSafeHandle
             {
                 NetEventSource.Info(this, $"{this} {_parent} ref count incremented");
             }
+            QuicLog.Info?.Invoke($"{this} {_parent} ref count incremented");
         }
     }
 
@@ -143,6 +146,7 @@ public sealed class MsQuicContextSafeHandle : MsQuicSafeHandle
             {
                 NetEventSource.Info(this, $"{this} {_parent} ref count decremented");
             }
+            QuicLog.Info?.Invoke($"{this} {_parent} ref count decremented");
         }
         _disposable?.Dispose();
         return true;

@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using Dummy.Quic;
 
 internal static class SslKeyLogger
 {
@@ -35,6 +36,7 @@ internal static class SslKeyLogger
             {
                 NetEventSource.Error(null, $"Failed to open SSL key log file '{s_keyLogFile}': {ex}");
             }
+            QuicLog.Error?.Invoke($"Failed to open SSL key log file '{s_keyLogFile}': {ex}");
         }
     }
 #pragma warning restore CA1810

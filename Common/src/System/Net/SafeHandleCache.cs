@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using Dummy.Quic;
 
 namespace System.Net
 {
@@ -56,6 +57,7 @@ namespace System.Net
                 {
                     NetEventSource.Info(this, $"Found cached {handle}.");
                 }
+                QuicLog.Info?.Invoke($"Found cached {handle}.");
                 return handle;
             }
 
@@ -86,6 +88,7 @@ namespace System.Net
                 {
                     NetEventSource.Info(this, $"Discarding {handle} (preferring cached {cached}).");
                 }
+                QuicLog.Info?.Invoke($"Discarding {handle} (preferring cached {cached}).");
 
                 // First dispose decrements the rent count we added before attempting the cache insertion
                 // and second closes the handle
@@ -122,6 +125,7 @@ namespace System.Net
                         {
                             NetEventSource.Info(this, $"Current size: {_cache.Count}.");
                         }
+                        QuicLog.Info?.Invoke($"Current size: {_cache.Count}.");
 
                         foreach ((TKey key, THandle handle) in _cache)
                         {
@@ -136,6 +140,7 @@ namespace System.Net
                             {
                                 NetEventSource.Info(this, $"Evicting cached {handle}.");
                             }
+                            QuicLog.Info?.Invoke($"Evicting cached {handle}.");
 
                             bool removed = _cache.TryRemove(key, out _);
                             Debug.Assert(removed);
@@ -149,6 +154,7 @@ namespace System.Net
                         {
                             NetEventSource.Info(this, $"New size: {_cache.Count}.");
                         }
+                        QuicLog.Info?.Invoke($"New size: {_cache.Count}.");
                     }
                 }
             }

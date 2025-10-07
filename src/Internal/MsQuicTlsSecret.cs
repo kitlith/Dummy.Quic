@@ -39,6 +39,7 @@ public sealed class MsQuicTlsSecret : IDisposable
             {
                 NetEventSource.Error(handle, $"Failed to set native memory for TLS secret: {ex}");
             }
+            QuicLog.Error?.Invoke($"Failed to set native memory for TLS secret: {ex}");
             if (tlsSecrets is not null)
             {
                 Marshal.FreeHGlobal((IntPtr)tlsSecrets);

@@ -51,6 +51,7 @@ public abstract class QuicConnection
         {
             NetEventSource.Info(this, $"{this} New outbound connection.");
         }
+        QuicLog.Info?.Invoke($"{this} New outbound connection.");
 
         // _decrementStreamCapacity = DecrementStreamCapacity;
         _tlsSecret = MsQuicTlsSecret.Create(_handle);
@@ -70,6 +71,7 @@ public abstract class QuicConnection
             {
                 NetEventSource.Error(null, $"Received event {connectionEvent->Type} for [conn][{(nint)connection:X11}] while connection is already disposed");
             }
+            QuicLog.Error?.Invoke($"Received event {connectionEvent->Type} for [conn][{(nint)connection:X11}] while connection is already disposed");
             return MsQuic.QUIC_STATUS_INVALID_STATE;
         }
 
@@ -80,6 +82,7 @@ public abstract class QuicConnection
             {
                 NetEventSource.Info(instance, $"{instance} Received event {connectionEvent->Type} {connectionEvent->ToString()}");
             }
+            QuicLog.Info?.Invoke($"{instance} Received event {connectionEvent->Type} {connectionEvent->ToString()}");
             return instance.HandleConnectionEvent(ref *connectionEvent);
         }
         catch (Exception ex)
@@ -88,6 +91,7 @@ public abstract class QuicConnection
             {
                 NetEventSource.Error(instance, $"{instance} Exception while processing event {connectionEvent->Type}: {ex}");
             }
+            QuicLog.Error?.Invoke($"{instance} Exception while processing event {connectionEvent->Type}: {ex}");
             return MsQuic.QUIC_STATUS_INTERNAL_ERROR;
         }
     }

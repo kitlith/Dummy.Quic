@@ -90,9 +90,11 @@ public sealed unsafe partial class MsQuicApi
             {
                 NetEventSource.Info(null, NotSupportedReason);
             }
+            QuicLog.Info?.Invoke(NotSupportedReason);
             return;
         }
 
+        // DUMMY_TODO: we're actually planning on bundling msquic ourselves instead of relying on it being on user's systems.
         if (Environment.OSVersion.Platform == PlatformID.Win32NT)
         {
             // Windows ships msquic in the assembly directory next to Dummy.Quic, so load that.
@@ -108,6 +110,7 @@ public sealed unsafe partial class MsQuicApi
             {
                 NetEventSource.Info(null, $"Attempting to load MsQuic from {path}");
             }
+            QuicLog.Info?.Invoke($"Attempting to load MsQuic from {path}");
 
             loaded = NativeLibrary.TryLoad(path, typeof(MsQuicApi).Assembly, DllImportSearchPath.LegacyBehavior, out msQuicHandle);
         }
@@ -126,6 +129,7 @@ public sealed unsafe partial class MsQuicApi
             {
                 NetEventSource.Info(null, NotSupportedReason);
             }
+            QuicLog.Info?.Invoke(NotSupportedReason);
             return;
         }
 
@@ -140,6 +144,7 @@ public sealed unsafe partial class MsQuicApi
             {
                 NetEventSource.Info(null, NotSupportedReason);
             }
+            QuicLog.Info?.Invoke(NotSupportedReason);
             return;
         }
 
@@ -158,6 +163,7 @@ public sealed unsafe partial class MsQuicApi
                 {
                     NetEventSource.Error(null, $"Cannot retrieve {nameof(QUIC_PARAM_GLOBAL_LIBRARY_VERSION)} from MsQuic library: '{status}'.");
                 }
+                QuicLog.Error?.Invoke($"Cannot retrieve {nameof(QUIC_PARAM_GLOBAL_LIBRARY_VERSION)} from MsQuic library: '{status}'.");
                 return;
             }
             Version = new Version((int)libVersion[0], (int)libVersion[1], (int)libVersion[2], (int)libVersion[3]);
@@ -171,6 +177,7 @@ public sealed unsafe partial class MsQuicApi
                 {
                     NetEventSource.Error(null, $"Cannot retrieve {nameof(QUIC_PARAM_GLOBAL_LIBRARY_GIT_HASH)} from MsQuic library: '{status}'.");
                 }
+                QuicLog.Error?.Invoke($"Cannot retrieve {nameof(QUIC_PARAM_GLOBAL_LIBRARY_GIT_HASH)} from MsQuic library: '{status}'.");
                 return;
             }
             string? gitHash = Marshal.PtrToStringUTF8((IntPtr)libGitHash);
@@ -184,6 +191,7 @@ public sealed unsafe partial class MsQuicApi
                 {
                     NetEventSource.Info(null, NotSupportedReason);
                 }
+                QuicLog.Info?.Invoke(NotSupportedReason);
                 return;
             }
 
@@ -191,6 +199,7 @@ public sealed unsafe partial class MsQuicApi
             {
                 NetEventSource.Info(null, $"Loaded MsQuic library '{MsQuicLibraryVersion}'.");
             }
+            QuicLog.Info?.Invoke($"Loaded MsQuic library '{MsQuicLibraryVersion}'.");
 
             // Assume SChannel is being used on windows and query for the actual provider from the library if querying is supported
             QUIC_TLS_PROVIDER provider = Environment.OSVersion.Platform == PlatformID.Win32NT ? QUIC_TLS_PROVIDER.SCHANNEL : QUIC_TLS_PROVIDER.OPENSSL;
@@ -208,6 +217,7 @@ public sealed unsafe partial class MsQuicApi
                     {
                         NetEventSource.Info(null, NotSupportedReason);
                     }
+                    QuicLog.Info?.Invoke(NotSupportedReason);
                     return;
                 }
 

@@ -59,6 +59,7 @@ public static partial class MsQuicConfiguration
                     {
                         NetEventSource.Info(options, $"'{certificate}' not selected because it doesn't have a private key.");
                     }
+                    QuicLog.Info?.Invoke($"'{certificate}' not selected because it doesn't have a private key.");
                 }
             }
         }
@@ -77,6 +78,7 @@ public static partial class MsQuicConfiguration
                     {
                         NetEventSource.Info(options, $"'{certificate}' not selected because it doesn't have a private key.");
                     }
+                    QuicLog.Info?.Invoke($"'{certificate}' not selected because it doesn't have a private key.");
                 }
             }
         }
