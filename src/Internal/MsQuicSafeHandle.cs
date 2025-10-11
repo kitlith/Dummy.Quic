@@ -61,7 +61,10 @@ public unsafe class MsQuicSafeHandle : SafeHandle
     {
         QUIC_HANDLE* quicHandle = QuicHandle;
         SetHandle(IntPtr.Zero);
-        _releaseAction(quicHandle);
+        if (_releaseAction != null)
+        {
+            _releaseAction(quicHandle);
+        }
 
         if (NetEventSource.Log.IsEnabled())
         {
