@@ -13,7 +13,7 @@ using static Microsoft.Quic.MsQuic;
 
 namespace Dummy.Quic;
 
-internal static class ThrowHelper
+public static class ThrowHelper
 {
     internal static QuicException GetConnectionAbortedException(long errorCode)
     {
@@ -134,7 +134,7 @@ internal static class ThrowHelper
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static void ThrowIfMsQuicError(int status, string? message = null)
+    public static void ThrowIfMsQuicError(int status, string? message = null)
     {
         if (StatusFailed(status))
         {

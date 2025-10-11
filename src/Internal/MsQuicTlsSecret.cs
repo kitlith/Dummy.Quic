@@ -12,7 +12,7 @@ using static Microsoft.Quic.MsQuic;
 
 namespace Dummy.Quic;
 
-internal sealed class MsQuicTlsSecret : IDisposable
+public sealed class MsQuicTlsSecret : IDisposable
 {
     private unsafe QUIC_TLS_SECRETS* _tlsSecrets;
 

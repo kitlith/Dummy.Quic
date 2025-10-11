@@ -15,9 +15,9 @@ using System.Net;
 
 namespace Dummy.Quic;
 
-internal static partial class MsQuicConfiguration
+public static partial class MsQuicConfiguration
 {
-    internal static bool ConfigurationCacheEnabled { get; } = !AppContextSwitchHelper.GetBooleanConfig(
+    public static bool ConfigurationCacheEnabled { get; } = !AppContextSwitchHelper.GetBooleanConfig(
         "Dummy.Quic.DisableConfigurationCache",
         "DOTNET_SYSTEM_NET_QUIC_DISABLE_CONFIGURATION_CACHE");
 

@@ -18,7 +18,7 @@ using Microsoft.Win32;
 
 namespace Dummy.Quic;
 
-internal sealed unsafe partial class MsQuicApi
+public sealed unsafe partial class MsQuicApi
 {
     private static readonly Version s_minWindowsVersion = new Version(10, 0, 20145, 1000);
 
@@ -56,7 +56,7 @@ internal sealed unsafe partial class MsQuicApi
     }
 
     private static readonly Lazy<MsQuicApi> _api = new Lazy<MsQuicApi>(AllocateMsQuicApi);
-    internal static MsQuicApi Api => _api.Value;
+    public static MsQuicApi Api => _api.Value;
 
     internal static Version? Version { get; }
 

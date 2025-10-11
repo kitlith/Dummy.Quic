@@ -18,12 +18,12 @@ using OperatingSystem = System.OperatingSystem;
 
 namespace Microsoft.Quic
 {
-    internal unsafe partial struct QUIC_BUFFER
+    public unsafe partial struct QUIC_BUFFER
     {
         public Span<byte> Span => new(Buffer, (int)Length);
     }
 
-    internal partial class MsQuic
+    public partial class MsQuic
     {
         public static unsafe QUIC_API_TABLE* Open()
         {
@@ -116,7 +116,7 @@ namespace Microsoft.Quic
     /// <summary>Defines the type of a member as it was used in the native signature.</summary>
     [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.ReturnValue, AllowMultiple = false, Inherited = true)]
     [Conditional("DEBUG")]
-    internal sealed class NativeTypeNameAttribute : Attribute
+    public sealed class NativeTypeNameAttribute : Attribute
     {
         private readonly string _name;
 
@@ -132,7 +132,7 @@ namespace Microsoft.Quic
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    internal struct QuicAddrFamilyAndLen
+    public struct QuicAddrFamilyAndLen
     {
         [FieldOffset(0)]
         public ushort sin_family;
@@ -143,7 +143,7 @@ namespace Microsoft.Quic
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe struct QuicAddrIn
+    public unsafe struct QuicAddrIn
     {
         public QuicAddrFamilyAndLen sin_family;
         public ushort sin_port;
@@ -151,7 +151,7 @@ namespace Microsoft.Quic
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe struct QuicAddrIn6
+    public unsafe struct QuicAddrIn6
     {
         public QuicAddrFamilyAndLen sin6_family;
         public ushort sin6_port;
@@ -161,7 +161,7 @@ namespace Microsoft.Quic
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    internal struct QuicAddr
+    public struct QuicAddr
     {
         [FieldOffset(0)]
         public QuicAddrIn Ipv4;
