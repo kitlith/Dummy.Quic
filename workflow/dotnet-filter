@@ -1,10 +1,10 @@
 :[
     src=:/src/libraries/System.Net.Quic/src:[
-        Resources=:/Resources,
+        Resources=:/Resources
         :/System/Net/Quic:[
-            ::Internal/,
-            ::QuicException.cs,
-            ::QuicError.cs,
+            ::Internal/
+            ::QuicException.cs
+            ::QuicError.cs
             ::QuicConnectionOptions.cs
             ::QuicDefaults.cs
         ]
