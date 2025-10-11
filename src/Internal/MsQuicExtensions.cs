@@ -6,13 +6,13 @@ using Dummy.Quic;
 
 namespace Microsoft.Quic;
 
-internal unsafe partial struct QUIC_NEW_CONNECTION_INFO
+public unsafe partial struct QUIC_NEW_CONNECTION_INFO
 {
     public override string ToString()
         => $"{{ {nameof(QuicVersion)} = {QuicVersion}, {nameof(LocalAddress)} = {MsQuicHelpers.QuicAddrToIPEndPoint(LocalAddress)}, {nameof(RemoteAddress)} = {MsQuicHelpers.QuicAddrToIPEndPoint(RemoteAddress)} }}";
 }
 
-internal unsafe partial struct QUIC_LISTENER_EVENT
+public unsafe partial struct QUIC_LISTENER_EVENT
 {
     public override string ToString()
         => Type switch
@@ -23,7 +23,7 @@ internal unsafe partial struct QUIC_LISTENER_EVENT
         };
 }
 
-internal unsafe partial struct QUIC_CONNECTION_EVENT
+public unsafe partial struct QUIC_CONNECTION_EVENT
 {
     public override string ToString()
         => Type switch
@@ -68,7 +68,7 @@ internal unsafe partial struct QUIC_CONNECTION_EVENT
         };
 }
 
-internal partial struct QUIC_STREAM_EVENT
+public partial struct QUIC_STREAM_EVENT
 {
     public override string ToString()
         => Type switch

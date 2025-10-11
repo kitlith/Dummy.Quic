@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 namespace Microsoft.Quic.Polyfill
 {
 #if NETSTANDARD
-    internal static class OperatingSystem
+    public static class OperatingSystem
     {
         public static bool IsWindows()
         {
@@ -62,7 +62,7 @@ namespace Microsoft.Quic.Polyfill
 #endif
 
 #if NETSTANDARD && !NETSTANDARD2_1_OR_GREATER
-    internal static class MemoryMarshal
+    public static class MemoryMarshal
     {
         public static ref T GetReference<T>(Span<T> span) {
             return ref span.GetPinnableReference();
@@ -75,11 +75,11 @@ namespace Microsoft.Quic.Polyfill
 #endif
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal unsafe delegate int MsQuicConnectionCallbackDelegate(QUIC_HANDLE* Handle, void* Context, QUIC_CONNECTION_EVENT* Event);
+    public unsafe delegate int MsQuicConnectionCallbackDelegate(QUIC_HANDLE* Handle, void* Context, QUIC_CONNECTION_EVENT* Event);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal unsafe delegate int MsQuicStreamCallbackDelegate(QUIC_HANDLE* Handle, void* Context, QUIC_STREAM_EVENT* Event);
+    public unsafe delegate int MsQuicStreamCallbackDelegate(QUIC_HANDLE* Handle, void* Context, QUIC_STREAM_EVENT* Event);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal unsafe delegate int MsQuicListenerCallbackDelegate(QUIC_HANDLE* Handle, void* Context, QUIC_LISTENER_EVENT* Event);
+    public unsafe delegate int MsQuicListenerCallbackDelegate(QUIC_HANDLE* Handle, void* Context, QUIC_LISTENER_EVENT* Event);
 }

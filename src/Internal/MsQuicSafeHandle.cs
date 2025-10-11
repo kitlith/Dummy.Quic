@@ -9,7 +9,7 @@ using System.Net;
 
 namespace Dummy.Quic;
 
-internal unsafe class MsQuicSafeHandle : SafeHandle
+public unsafe class MsQuicSafeHandle : SafeHandle
 {
     // The index must correspond to SafeHandleType enum value and the value must correspond to MsQuic logging abbreviation string.
     // This is used for our logging that uses the same format of object identification as MsQuic to easily correlate log events.
@@ -74,7 +74,7 @@ internal unsafe class MsQuicSafeHandle : SafeHandle
     public override string ToString() => _traceId ??= $"[{s_typeName[(int)_type]}][0x{DangerousGetHandle():X11}]";
 }
 
-internal enum SafeHandleType
+public enum SafeHandleType
 {
     Registration,
     Configuration,
@@ -83,7 +83,7 @@ internal enum SafeHandleType
     Stream
 }
 
-internal sealed class MsQuicContextSafeHandle : MsQuicSafeHandle
+public sealed class MsQuicContextSafeHandle : MsQuicSafeHandle
 {
     /// <summary>
     /// Holds a weak reference to the managed instance.
@@ -146,7 +146,7 @@ internal sealed class MsQuicContextSafeHandle : MsQuicSafeHandle
     }
 }
 
-internal sealed class MsQuicConfigurationSafeHandle : MsQuicSafeHandle, ISafeHandleCachable
+public sealed class MsQuicConfigurationSafeHandle : MsQuicSafeHandle, ISafeHandleCachable
 {
     // MsQuicConfiguration handles are cached, so we need to keep track of the
     // number of times a handle is rented. Once we decide to dispose the handle,

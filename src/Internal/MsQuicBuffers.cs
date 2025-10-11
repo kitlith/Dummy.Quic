@@ -14,7 +14,7 @@ namespace Dummy.Quic;
 /// It also allows reuse with repeated Reset/Initialize calls, e.g. new, Initialize, (use), Reset, Initialize, (use), Reset, Initialize, (use), Dispose.
 /// Note that since this is struct and there's no finalizer, Dispose must be always called to release the unmanaged memory allocated by this struct.
 /// </summary>
-internal unsafe struct MsQuicBuffers : IDisposable
+public unsafe struct MsQuicBuffers : IDisposable
 {
     // Native memory block which holds the pinned memory pointers from _handles and can be passed to MsQuic as QUIC_BUFFER*.
     private QUIC_BUFFER* _buffers;

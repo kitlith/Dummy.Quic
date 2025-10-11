@@ -5,7 +5,7 @@ using Microsoft.Quic;
 
 namespace Dummy.Quic;
 
-internal sealed unsafe partial class MsQuicApi
+public sealed unsafe partial class MsQuicApi
 {
     public void SetContext(MsQuicSafeHandle handle, void* context)
     {
