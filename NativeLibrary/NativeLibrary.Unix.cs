@@ -13,6 +13,8 @@ namespace System.Runtime.InteropServices
 
 #if TARGET_OSX || TARGET_MACCATALYST || TARGET_IOS || TARGET_TVOS
         private const string LibName = "libSystem.B.dylib";
+#elif TARGET_ANDROID
+        private const string LibName = "libdl.so";
 #else
         private const string LibName = "libdl.so.2";
 #endif

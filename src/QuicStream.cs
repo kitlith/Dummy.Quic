@@ -10,7 +10,7 @@ public abstract class QuicStream {
     public MsQuicSafeHandle Handle { get => _handle; }
     protected unsafe nint HandleInt { get => (nint)_handle.QuicHandle; }
 
-    protected unsafe QuicStream(QuicConnection connection, QUIC_STREAM_OPEN_FLAGS flags, GCHandleType handleType = GCHandleType.Weak) : this(connection, flags, &NativeCallback) { }
+    protected unsafe QuicStream(QuicConnection connection, QUIC_STREAM_OPEN_FLAGS flags, GCHandleType handleType = GCHandleType.Weak) : this(connection, flags, &NativeCallback, handleType) { }
     protected unsafe QuicStream(QuicConnection connection, QUIC_STREAM_OPEN_FLAGS flags, delegate* unmanaged[Cdecl]<QUIC_HANDLE*, void*, QUIC_STREAM_EVENT*, int> callback, GCHandleType handleType = GCHandleType.Weak)
     {
         GCHandle context = GCHandle.Alloc(this, handleType);

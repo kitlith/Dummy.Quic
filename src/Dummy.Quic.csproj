@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <RuntimeIdentifiers>linux-x64;win-x64</RuntimeIdentifiers>
+        <RuntimeIdentifiers>linux-x64;win-x64;android-arm64</RuntimeIdentifiers>
         <PublishSelfContained>false</PublishSelfContained>
         <!-- TODO: replace DynamicDependency with Unity's Preserve/similar attributes -->
         <PolySharpIncludeRuntimeSupportedAttributes>true</PolySharpIncludeRuntimeSupportedAttributes>
@@ -52,12 +52,20 @@
         <Compile Include="../NativeLibrary/Interop/Kernel32.cs" />
     </ItemGroup>
 
+    <PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('win'))">
+        <DefineConstants>TARGET_WINDOWS</DefineConstants>
+    </PropertyGroup>
+
     <!-- Linux specific files -->
-    <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('linux'))">
+    <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('android'))">
         <Compile Include="$(CommonPath)Interop\Linux\Interop.Libraries.cs" Link="Common\Interop\Linux\Interop.Libraries.cs" />
         <Compile Include="../NativeLibrary/NativeLibrary.Unix.cs" />
         <Compile Include="../NativeLibrary/LibraryNameVariation.Unix.cs" />
     </ItemGroup>
+
+    <PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('android'))">
+        <DefineConstants>TARGET_ANDROID</DefineConstants>
+    </PropertyGroup>
 
     <!-- FreeBSD specific files -->
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('freebsd'))">
@@ -72,6 +80,10 @@
         <Compile Include="../NativeLibrary/NativeLibrary.Unix.cs" />
         <Compile Include="../NativeLibrary/LibraryNameVariation.Unix.cs" />
     </ItemGroup>
+
+    <PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('osx'))">
+        <DefineConstants>TARGET_OSX</DefineConstants>
+    </PropertyGroup>
 
     <ItemGroup>
         <EmbeddedResource Update="Resources/Strings.resx" EmitFormatMethods="true">
