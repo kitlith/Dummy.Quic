@@ -36,6 +36,12 @@ filter_remote() {
 
 echo "-- Current operation ID (if you need to revert): $(jj op log --no-graph -n 1 -T 'id.short()')"
 
+if jj bookmark list -T 'name ++ "\n"' | grep -q workflow; then
+    : # local bookmark already exists, do nothing
+else
+    jj bookmark track workflow@origin
+fi
+
 maybe_create_remote dotnet https://github.com/dotnet/runtime.git
 filter_remote dotnet main workflow/dotnet-filter Dotnet-Commit
 maybe_create_remote msquic https://github.com/microsoft/msquic.git
