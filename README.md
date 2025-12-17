@@ -13,7 +13,7 @@ cd Dummy.Quic
 jj config set --repo 'revset-aliases."immutable_heads()"' "(present(ooxtuqvy)- ~ workflow::) | present(main@dotnet) | present(main@msquic)"
 ```
 
-### Usage
+### Updating From Upstream
 ```bash
 ./update_remotes.sh
 # or, if you want to pull the latest commits from upstream:

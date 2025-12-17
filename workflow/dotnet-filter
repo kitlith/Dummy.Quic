@@ -13,6 +13,7 @@
         ::DisableRuntimeMarshalling.cs
         ::System/AppContextSwitchHelper.cs
         ::System/HexConverter.cs
+        ::System/SR.cs
         System/Net=:/System/Net:[
             ::SafeHandleCache.cs
             ::ArrayBuffer.cs
@@ -30,10 +31,27 @@
         Interop/Windows=:/Interop/Windows:[
             ::Interop.Libraries.cs
             ::Interop.Errors.cs
+
             ::Kernel32/Interop.FormatMessage.cs
+            ::SChannel/Interop.SECURITY_STATUS.cs
+            
+            ::Crypt32/Interop.CertDuplicateCertificateContext.cs
+            ::Crypt32/Interop.CertFreeCertificateContext.cs
+            ::Crypt32/Interop.CertGetCertificateContextProperty.cs
+            ::Crypt32/Interop.CertContextPropId.cs
+            ::Crypt32/Interop.DATA_BLOB.cs
+            ::Crypt32/Interop.CERT_CONTEXT.cs
+            ::Crypt32/Interop.MsgEncodingType.cs
+            ::Crypt32/Interop.CERT_INFO.cs
+            ::Crypt32/Interop.CRYPT_ALGORITHM_IDENTIFIER.cs
+            ::Crypt32/Interop.CERT_PUBLIC_KEY_INFO.cs
+            ::Crypt32/Interop.CRYPT_BIT_BLOB.cs
         ]
         ::Microsoft/Win32/SafeHandles/SafeLibraryHandle.cs
-
+        ::Microsoft/Win32/SafeHandles/SafeCertContextHandle.cs
+        ::Microsoft/Win32/SafeHandles/SafeCrypt32Handle.cs
+        ::Microsoft/Win32/SafeHandles/SafeHandleCache.cs
+        
         ::Interop/Linux/Interop.Libraries.cs
 
         ::Interop/FreeBSD/Interop.Libraries.cs
@@ -56,6 +74,9 @@
             ::LibraryNameVariation.cs
             ::LibraryNameVariation.Unix.cs
             ::LibraryNameVariation.Windows.cs
+        ]
+        :/src/libraries/System.Private.CoreLib/src:[
+            ::System/IO/DisableMediaInsertionPrompt.cs
         ]
     ]
 

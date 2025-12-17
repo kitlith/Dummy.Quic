@@ -9,8 +9,8 @@ internal static partial class Interop
     internal static partial class Crypt32
     {
         // Note: This api always return TRUE, regardless of success.
-        [LibraryImport(Libraries.Crypt32, SetLastError = true)]
+        [DllImport(Libraries.Crypt32, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static partial bool CertFreeCertificateContext(IntPtr pCertContext);
+        internal static extern bool CertFreeCertificateContext(IntPtr pCertContext);
     }
 }

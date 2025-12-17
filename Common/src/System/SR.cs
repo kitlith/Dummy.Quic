@@ -8,6 +8,10 @@ namespace System
     internal static partial class SR
     {
         private static readonly bool s_usingResourceKeys = GetUsingResourceKeysSwitchValue();
+        private static ResourceManager? s_resourceManager;
+
+        private static ResourceManager GetResourceManager =>
+            s_resourceManager ??= new ResourceManager("Dummy.Quic.Resources.Strings", typeof(SR).Assembly);
 
         // This method is a target of ILLink substitution.
         private static bool GetUsingResourceKeysSwitchValue() => AppContext.TryGetSwitch("System.Resources.UseSystemResourceKeys", out bool usingResourceKeys) ? usingResourceKeys : false;
@@ -42,7 +46,7 @@ namespace System
 #if SYSTEM_PRIVATE_CORELIB || NATIVEAOT
                     InternalGetResourceString(resourceKey);
 #else
-                    ResourceManager.GetString(resourceKey);
+                    GetResourceManager.GetString(resourceKey);
 #endif
             }
             catch (MissingManifestResourceException) { }

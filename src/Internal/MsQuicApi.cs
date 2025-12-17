@@ -257,28 +257,29 @@ public sealed unsafe partial class MsQuicApi
 
     private static bool IsTls13Disabled(bool isServer)
     {
-#if TARGET_WINDOWS
-        string SChannelTls13RegistryKey = isServer
-            ? @"SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.3\Server"
-            : @"SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.3\Client";
+// TODO: win registry for server/client TLS 1.3 check
+// #if TARGET_WINDOWS
+//         string SChannelTls13RegistryKey = isServer
+//             ? @"SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.3\Server"
+//             : @"SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.3\Client";
 
-        using var regKey = Registry.LocalMachine.OpenSubKey(SChannelTls13RegistryKey);
+//         using var regKey = Registry.LocalMachine.OpenSubKey(SChannelTls13RegistryKey);
 
-        if (regKey is null)
-        {
-            return false;
-        }
+//         if (regKey is null)
+//         {
+//             return false;
+//         }
 
-        if (regKey.GetValue("Enabled") is int enabled && enabled == 0)
-        {
-            return true;
-        }
+//         if (regKey.GetValue("Enabled") is int enabled && enabled == 0)
+//         {
+//             return true;
+//         }
 
-        if (regKey.GetValue("DisabledByDefault") is int disabled && disabled == 1)
-        {
-            return true;
-        }
-#endif
+//         if (regKey.GetValue("DisabledByDefault") is int disabled && disabled == 1)
+//         {
+//             return true;
+//         }
+// #endif
         return false;
     }
 

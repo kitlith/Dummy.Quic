@@ -9,33 +9,33 @@ internal static partial class Interop
 {
     internal static partial class Crypt32
     {
-        [LibraryImport(Libraries.Crypt32, SetLastError = true)]
+        [DllImport(Libraries.Crypt32, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static partial bool CertGetCertificateContextProperty(
+        internal static extern bool CertGetCertificateContextProperty(
             SafeCertContextHandle pCertContext,
             CertContextPropId dwPropId,
             byte[]? pvData,
             ref int pcbData);
 
-        [LibraryImport(Libraries.Crypt32, SetLastError = true, EntryPoint = "CertGetCertificateContextProperty")]
+        [DllImport(Libraries.Crypt32, SetLastError = true, EntryPoint = "CertGetCertificateContextProperty")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static unsafe partial bool CertGetCertificateContextPropertyPtr(
+        internal static unsafe extern bool CertGetCertificateContextPropertyPtr(
             SafeCertContextHandle pCertContext,
             CertContextPropId dwPropId,
             byte* pvData,
             ref int pcbData);
 
-        [LibraryImport(Libraries.Crypt32, SetLastError = true)]
+        [DllImport(Libraries.Crypt32, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static partial bool CertGetCertificateContextProperty(
+        internal static extern bool CertGetCertificateContextProperty(
             SafeCertContextHandle pCertContext,
             CertContextPropId dwPropId,
             out IntPtr pvData,
             ref int pcbData);
 
-        [LibraryImport(Libraries.Crypt32, SetLastError = true)]
+        [DllImport(Libraries.Crypt32, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static partial bool CertGetCertificateContextProperty(
+        internal static extern bool CertGetCertificateContextProperty(
             SafeCertContextHandle pCertContext,
             CertContextPropId dwPropId,
             out DATA_BLOB pvData,

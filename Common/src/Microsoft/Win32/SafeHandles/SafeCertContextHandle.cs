@@ -5,6 +5,7 @@
 
 using System;
 using System.Diagnostics;
+using Dummy.Quic.Polyfill;
 using static Interop.Crypt32;
 
 namespace Microsoft.Win32.SafeHandles
@@ -20,7 +21,7 @@ namespace Microsoft.Win32.SafeHandles
 
         public SafeCertContextHandle(SafeCertContextHandle parent)
         {
-            ArgumentNullException.ThrowIfNull(parent);
+            ArgumentNullExceptionPolyfill.ThrowIfNull(parent);
 
             Debug.Assert(!parent.IsInvalid);
             Debug.Assert(!parent.IsClosed);

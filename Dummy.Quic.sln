@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dummy.Quic", "src\Dummy.Quic.csproj", "{AE266A6F-04C8-AEA6-6ED4-DDCDF1143795}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE266A6F-04C8-AEA6-6ED4-DDCDF1143795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE266A6F-04C8-AEA6-6ED4-DDCDF1143795}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE266A6F-04C8-AEA6-6ED4-DDCDF1143795}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE266A6F-04C8-AEA6-6ED4-DDCDF1143795}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AE266A6F-04C8-AEA6-6ED4-DDCDF1143795} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F0ADD688-7B6F-4DEF-9B98-D5DC188D7426}
+	EndGlobalSection
+EndGlobal
